@@ -4,10 +4,10 @@ import { z } from 'zod';
 import { useState } from "react";
 import { signIn } from 'next-auth/react';
 import { useForm } from "react-hook-form";
+import { useSearchParams } from 'next/navigation';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Mail, Visibility, VisibilityOff, Key } from '@mui/icons-material';
 import { Alert, Box, Button, Checkbox, CircularProgress, Divider, FormControlLabel, IconButton, InputAdornment, TextField } from "@mui/material";
-import { useSearchParams } from 'next/navigation';
 
 const schemaLogin = z.object({
     email: z.string().email("Email inválido"),
