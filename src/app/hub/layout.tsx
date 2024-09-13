@@ -1,14 +1,17 @@
 'use client'
 
 import Link from "next/link";
+import Image from "next/image";
+import { useEffect } from "react";
+import { signOut } from "next-auth/react";
+import { deleteCookie } from 'cookies-next';
 import { usePathname } from "next/navigation";
+import LogoutIcon from '@mui/icons-material/Logout';
+import { setupAxiosInterceptors } from "@/libs/axios";
+import profileImage from '../../../public/profile.jpeg'
 import { LogoComponent } from "@/components/ui/LogoComponent";
 import { Dashboard, CorporateFare, AccountBox, Assessment } from "@mui/icons-material";
 import { Box, IconButton, List, ListItemButton, ListItemIcon, ListItemText, Tooltip } from "@mui/material";
-import profileImage from '../../../public/profile.jpeg'
-import LogoutIcon from '@mui/icons-material/Logout';
-import { signOut } from "next-auth/react";
-import Image from "next/image";
 interface LayoutHubProps {
     children: React.ReactNode;
 }
@@ -38,6 +41,10 @@ const linksNavs = [
 
 export default function LayoutHub({ children }: LayoutHubProps) {
     const pathName = usePathname();
+
+    useEffect(() => {
+        setupAxiosInterceptors(signOut)
+    }, [])
 
     return (
         <>
@@ -106,7 +113,10 @@ export default function LayoutHub({ children }: LayoutHubProps) {
                             }}
                         >
                             <Tooltip title="Sair">
-                                <IconButton onClick={() => signOut()}>
+                                <IconButton onClick={() => {
+                                    deleteCookie('jwt');
+                                    signOut();
+                                }}>
                                     <LogoutIcon />
                                 </IconButton>
                             </Tooltip>
