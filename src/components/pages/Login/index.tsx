@@ -4,7 +4,7 @@ import { ModalLoginComponent } from './Modal';
 import { Box, Typography } from "@mui/material";
 import { LogoComponent } from '@/components/ui/LogoComponent';
 
-export function LoginComponent() {
+export default function LoginComponent() {
     return (
         <Box sx={{ display: "flex", minHeight: '100vh' }}>
             <Box sx={{ position: 'relative', flex: 1 }}>

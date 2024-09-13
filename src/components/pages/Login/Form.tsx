@@ -34,7 +34,7 @@ export function FormLoginComponent() {
     async function handleLogin(data: loginTypeData) {
         setIsLoading(true);
         signIn('credentials',
-            { email: data.email, password: data.password, callbackUrl: '/hub' }
+            { email: data.email, password: data.password, callbackUrl: '/hub/dashboard' }
         ).then(() => {
             console.log("Login efetuado com sucesso");
         }).catch((err) => {
@@ -54,7 +54,6 @@ export function FormLoginComponent() {
                 gap: '1rem'
             }}
         >
-
             {error &&
                 <Alert variant="filled" severity="error">
                     Email ou senha invalidos

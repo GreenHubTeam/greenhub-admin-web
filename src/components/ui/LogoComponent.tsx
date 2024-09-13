@@ -1,5 +1,6 @@
 import { Box, Divider, Typography } from "@mui/material";
 import Image from "next/image";
+import Logo from '../../../public/logo.png'
 
 export function LogoComponent() {
     return (
@@ -11,10 +12,11 @@ export function LogoComponent() {
             }}
         >
             <Image
-                src='/logo.png'
+                src={Logo}
                 alt="Logo da greenHub"
                 width={70}
                 height={70}
+                priority
             />
 
             <Divider orientation="vertical" flexItem variant="middle" />
