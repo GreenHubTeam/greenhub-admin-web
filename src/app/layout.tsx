@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { inter } from '../utils/fonts';
 import ThemeClientProvider from "@/theme";
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from "react-toastify";
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter';
 
 export const metadata: Metadata = {
@@ -18,6 +20,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <AppRouterCacheProvider>
           <ThemeClientProvider>
+            <ToastContainer />
             {children}
           </ThemeClientProvider>
         </AppRouterCacheProvider>

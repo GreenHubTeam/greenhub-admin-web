@@ -7,12 +7,11 @@ import { useForm } from "react-hook-form";
 import { useSearchParams } from 'next/navigation';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Mail, Visibility, VisibilityOff, Key } from '@mui/icons-material';
-import { Alert, Box, Button, Checkbox, CircularProgress, Divider, FormControlLabel, IconButton, InputAdornment, TextField } from "@mui/material";
+import { Alert, Box, Button, CircularProgress, Divider, IconButton, InputAdornment, TextField } from "@mui/material";
 
 const schemaLogin = z.object({
     email: z.string().email("Email inválido"),
-    password: z.string().min(4, "Minimo 4 caracteres"),
-    remember: z.boolean()
+    password: z.string().min(4, "Minimo 4 caracteres")
 });
 
 type loginTypeData = z.infer<typeof schemaLogin>;
@@ -126,14 +125,6 @@ export function FormLoginComponent() {
                     gap: '.5rem'
                 }}
             >
-                <FormControlLabel
-                    control={<Checkbox
-                        size='medium'
-                        {...register('remember')}
-                        color='success'
-                    />}
-                    label="Lembrar me"
-                />
                 <Button
                     type="submit"
                     variant="contained"

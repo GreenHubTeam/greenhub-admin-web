@@ -1,7 +1,6 @@
-import { Typography } from "@mui/material";
+import { lazy } from "react";
+const UserComponent = lazy(() => import('@/components/pages/User'));
 
-export default function Page() {
-    return (
-        <Typography>USERS</Typography>
-    )
+export default function UserPage() {
+    return <UserComponent />
 }

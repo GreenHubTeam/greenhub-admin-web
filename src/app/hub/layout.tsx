@@ -8,7 +8,7 @@ import { deleteCookie } from 'cookies-next';
 import { usePathname } from "next/navigation";
 import LogoutIcon from '@mui/icons-material/Logout';
 import { setupAxiosInterceptors } from "@/libs/axios";
-import profileImage from '../../../public/profile.jpeg'
+import profileImage from '../../../public/profile.jpeg';
 import { LogoComponent } from "@/components/ui/LogoComponent";
 import { Dashboard, CorporateFare, AccountBox, Assessment } from "@mui/icons-material";
 import { Box, IconButton, List, ListItemButton, ListItemIcon, ListItemText, Tooltip } from "@mui/material";
