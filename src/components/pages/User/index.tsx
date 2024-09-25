@@ -1,14 +1,18 @@
 'use client'
 
+import dayjs from 'dayjs';
+import { env } from "@/env/env";
 import { api } from "@/libs/axios";
-import useSearch from "./useSearch";
 import { isAxiosError } from "axios";
 import { toast } from "react-toastify";
+import useSearch from "@/hooks/useSearch";
 import { useEffect, useState } from "react";
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import ModalCreateUser from "@/components/ui/ModalCreateUser";
-import { Add, MoreVert, Replay, Search } from "@mui/icons-material";
-import { Box, Button, IconButton, InputAdornment, MenuItem, TextField, Typography } from "@mui/material";
+import { formatCPF } from "@/utils/formatCPF";
+import { ModalDelete } from '@/components/ui/user/ModalDeleteUser';
+import ModalCreateUser from "@/components/ui/user/ModalCreateUser";
+import { Add, Delete, Mode, Replay, Search } from "@mui/icons-material";
+import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
+import { Avatar, Box, Button, Chip, IconButton, InputAdornment, MenuItem, TextField, Tooltip, Typography } from "@mui/material";
 
 export default function UserComponent() {
     const [dataUser, setDataUser] = useState({
@@ -22,15 +26,29 @@ export default function UserComponent() {
     });
     const [isLoading, setIsLoading] = useState(false);
     const [isRefetch, setIsRefetch] = useState(false);
-    const [isOpenModal, setIsOpenModal] = useState(false);
-    const { searchFilter, setSearchFilter } = useSearch();
 
-    const handleClose = () => {
-        setIsOpenModal(false);
+    const [isOpenModalCreate, setIsOpenModalCreate] = useState(false);
+    const [isOpenModalDelete, setIsOpenModalDelete] = useState(false);
+
+    const { searchFilter, setSearchFilter } = useSearch();
+    const [userId, setUserId] = useState(null);
+
+    const handleOpenDeleteModal = () => {
+        setIsOpenModalDelete(true);
     }
 
-    const handleOpen = () => {
-        setIsOpenModal(true);
+    const handleCloseDeleteModal = () => {
+        setUserId(null);
+        setIsOpenModalDelete(false);
+    }
+
+    const handleCloseCreateModal = () => {
+        setUserId(null);
+        setIsOpenModalCreate(false);
+    }
+
+    const handleOpenCreateModal = () => {
+        setIsOpenModalCreate(true);
     }
 
     function refetchDataGrid() {
@@ -78,25 +96,78 @@ export default function UserComponent() {
             field: "name",
             headerName: "Nome",
             resizable: false,
-            flex: 1
+            flex: 1,
+            renderCell: (params: GridRenderCellParams) => {
+                return (
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            height: '100%',
+                            gap: '1rem',
+                        }}
+                    >
+                        <Avatar
+                            src={`${env.base_url_api}/${params.row.imagePath}`}
+                            alt={params.row.name}
+                        />
+
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                overflow: 'hidden'
+                            }}
+                        >
+                            <Typography>
+                                {params.row.name}
+                            </Typography>
+                            <Typography sx={{ color: 'gray', fontSize: '.7rem' }}>
+                                {params.row.email}
+                            </Typography>
+                        </Box>
+                    </Box>
+                )
+            },
         },
         {
             field: "type",
             headerName: "Tipo",
             resizable: false,
-            flex: 1
-        },
-        {
-            field: "email",
-            headerName: "Email",
-            resizable: false,
-            flex: 1
+            width: 120,
+            align: 'center',
+            renderCell: (params: GridRenderCellParams) => {
+                return (
+                    <Chip
+                        label={params.row.type}
+                        sx={{
+                            backgroundColor: params.row.type === 'ADMIN' ? '#222222' : 'green',
+                            color: 'white'
+                        }}
+                    />
+                )
+            }
         },
         {
             field: "document",
             headerName: "Documento",
             resizable: false,
-            flex: 1
+            flex: 1,
+            valueFormatter: (value: string) => formatCPF(value)
+        },
+        {
+            field: "createdAt",
+            headerName: "Criado em",
+            resizable: false,
+            flex: 1,
+            valueFormatter: (value: Date) => dayjs(value).format('DD/MM/YYYY - HH:mm')
+        },
+        {
+            field: "updatedAt",
+            headerName: "Atualizado em",
+            resizable: false,
+            flex: 1,
+            valueFormatter: (value: Date) => dayjs(value).format('DD/MM/YYYY - HH:mm')
         },
         {
             field: 'actions',
@@ -104,24 +175,39 @@ export default function UserComponent() {
             headerAlign: 'center',
             width: 100,
             resizable: false,
-            renderCell(params: any) {
+            renderCell(params: GridRenderCellParams) {
                 return (
                     <Box
                         sx={{
                             display: 'flex',
                             justifyContent: 'center',
-                            alignItems: 'center'
+                            alignItems: 'center',
+                            gap: '.3rem',
+                            height: '100%'
                         }}
                     >
-                        <IconButton>
-                            <MoreVert />
-                        </IconButton>
+                        <Tooltip title="Editar">
+                            <IconButton onClick={() => {
+                                setUserId(params.row.id);
+                                handleOpenCreateModal();
+                            }} >
+                                <Mode color="action" />
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Excluir">
+                            <IconButton onClick={() => {
+                                setUserId(params.row.id);
+                                handleOpenDeleteModal()
+                            }}>
+                                <Delete color="error" />
+                            </IconButton>
+                        </Tooltip>
                     </Box>
                 )
 
             },
         }
-    ]
+    ];
 
     return (
         <>
@@ -144,7 +230,7 @@ export default function UserComponent() {
                             boxShadow: 'none'
                         }}
                         startIcon={<Add />}
-                        onClick={handleOpen}
+                        onClick={handleOpenCreateModal}
                     >
                         Criar usuário
                     </Button>
@@ -207,7 +293,8 @@ export default function UserComponent() {
                                 color: 'green'
                             },
                             borderRadius: 2,
-                            width: '15rem'
+                            width: '15rem',
+                            borderColor: '#E8E8E8'
                         }}
                         value={dataUser?.userType || ''}
                         onChange={(e) => {
@@ -222,7 +309,6 @@ export default function UserComponent() {
                         <MenuItem value="ALL">Todos</MenuItem>
                         <MenuItem value="ADMIN">Admin</MenuItem>
                         <MenuItem value="DONOR">Doador</MenuItem>
-                        <MenuItem value="ONG">ONG</MenuItem>
                     </TextField>
 
                     <Button
@@ -244,6 +330,9 @@ export default function UserComponent() {
                     }}
                 >
                     <DataGrid
+                        disableColumnSorting
+                        disableColumnMenu
+                        rowHeight={75}
                         rows={dataUser.users}
                         columns={columns}
                         slotProps={{
@@ -274,8 +363,16 @@ export default function UserComponent() {
 
             <ModalCreateUser
                 refetchDataGrid={refetchDataGrid}
-                open={isOpenModal}
-                handleClose={handleClose}
+                open={isOpenModalCreate}
+                handleClose={handleCloseCreateModal}
+                userId={userId}
+            />
+
+            <ModalDelete
+                handleClose={handleCloseDeleteModal}
+                isOpenModal={isOpenModalDelete}
+                userId={userId}
+                refetchDataGrid={refetchDataGrid}
             />
         </>
     )

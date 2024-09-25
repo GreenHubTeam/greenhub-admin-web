@@ -21,6 +21,8 @@
     "axios": "^1.7.7",
     "cookies-next": "^4.2.1",
     "dayjs": "^1.11.13",
+    "js-brasil": "^2.6.1",
+    "jwt-decode": "^4.0.0",
     "next": "14.2.8",
     "next-auth": "^5.0.0-beta.20",
     "react": "^18",

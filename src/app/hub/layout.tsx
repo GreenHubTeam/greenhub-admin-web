@@ -11,7 +11,7 @@ import { setupAxiosInterceptors } from "@/libs/axios";
 import profileImage from '../../../public/profile.jpeg';
 import { LogoComponent } from "@/components/ui/LogoComponent";
 import { Dashboard, CorporateFare, AccountBox, Assessment } from "@mui/icons-material";
-import { Box, IconButton, List, ListItemButton, ListItemIcon, ListItemText, Tooltip } from "@mui/material";
+import { Box, Grid2, IconButton, List, ListItemButton, ListItemIcon, ListItemText, Tooltip } from "@mui/material";
 interface LayoutHubProps {
     children: React.ReactNode;
 }
@@ -48,52 +48,53 @@ export default function LayoutHub({ children }: LayoutHubProps) {
 
     return (
         <>
-            <Box sx={{ display: 'flex', height: '100vh' }}>
-                <Box
-                    sx={{
-                        display: 'flex',
-                        width: '300px',
-                        flexDirection: 'column',
-                        borderRight: 1,
-                        borderColor: '#F0F0F0',
-                        padding: '1rem',
-                        height: '100vh',
-                        overflowY: 'auto',
-                    }}>
-                    <LogoComponent />
+            <Grid2 container>
+                <Grid2 size={2.5}>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            borderRight: 1,
+                            borderColor: '#F0F0F0',
+                            padding: '1rem',
+                            height: '100vh',
+                            overflowY: 'auto',
+                        }}>
 
-                    <List sx={{ marginTop: '1rem' }}>
-                        {
-                            linksNavs.map((link, index) => (
-                                <Box key={index} component={Link} href={link.path} passHref sx={{
-                                    textDecoration: 'none',
-                                    color: "#6D6D6D",
-                                    fontSize: '.9rem',
-                                }}>
-                                    <ListItemButton
-                                        sx={{
-                                            borderRadius: '8px',
-                                            marginBottom: '.2rem',
-                                            '&:hover': {
-                                                backgroundColor: pathName.includes(link.path) ? 'rgba(0, 128, 0, 0.5)' : '#F1F1F1', // Fundo verde transparente
-                                            },
-                                            backgroundColor: pathName.includes(link.path) ? 'rgba(0, 128, 0, 0.1)' : '',
-                                            color: pathName.includes(link.path) ? 'green' : '',
-                                        }}
-                                    >
-                                        <ListItemIcon sx={{ color: pathName.includes(link.path) ? 'rgba(0, 128, 0, 0.5)' : '' }}>
-                                            {link.icon}
-                                        </ListItemIcon>
-                                        <ListItemText primary={link.name} />
-                                    </ListItemButton>
-                                </Box>
-                            ))
-                        }
+                        <LogoComponent />
 
-                    </List>
-                </Box >
+                        <List sx={{ marginTop: '1rem' }}>
+                            {
+                                linksNavs.map((link, index) => (
+                                    <Box key={index} component={Link} href={link.path} passHref sx={{
+                                        textDecoration: 'none',
+                                        color: "#6D6D6D",
+                                        fontSize: '.9rem',
+                                    }}>
+                                        <ListItemButton
+                                            sx={{
+                                                borderRadius: '8px',
+                                                marginBottom: '.2rem',
+                                                '&:hover': {
+                                                    backgroundColor: pathName.includes(link.path) ? 'rgba(0, 128, 0, 0.5)' : '#F1F1F1', // Fundo verde transparente
+                                                },
+                                                backgroundColor: pathName.includes(link.path) ? 'rgba(0, 128, 0, 0.1)' : '',
+                                                color: pathName.includes(link.path) ? 'green' : '',
+                                            }}
+                                        >
+                                            <ListItemIcon sx={{ color: pathName.includes(link.path) ? 'rgba(0, 128, 0, 0.5)' : '' }}>
+                                                {link.icon}
+                                            </ListItemIcon>
+                                            <ListItemText primary={link.name} />
+                                        </ListItemButton>
+                                    </Box>
+                                ))
+                            }
 
-                <Box sx={{ flex: 1 }}>
+                        </List>
+                    </Box >
+                </Grid2>
+                <Grid2 size={9.5}>
                     <Box
                         sx={{
                             display: 'flex',
@@ -136,12 +137,12 @@ export default function LayoutHub({ children }: LayoutHubProps) {
                                 </IconButton>
                             </Tooltip>
                         </Box>
-                        <Box sx={{ flexGrow: 1, overflowY: 'auto' }}>
+                        <Box sx={{ flexGrow: 1, py: '1rem', overflowY: 'auto' }}>
                             {children}
                         </Box>
                     </Box>
-                </Box>
-            </Box >
+                </Grid2>
+            </Grid2 >
         </>
     )
 }

@@ -6,6 +6,4 @@ const inter = Inter({
     style: 'normal'
 });
 
-export {
-    inter
-}
+export { inter }

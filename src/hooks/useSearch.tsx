@@ -10,7 +10,7 @@ export default function useSearch() {
     }
 }
 
-function useDebounce(value: any, delay: number) {
+function useDebounce(value: string | number, delay: number) {
     const [debouncedValue, setDebouncedValue] = useState(value);
 
     useEffect(() => {
