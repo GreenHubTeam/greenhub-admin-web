@@ -60,13 +60,11 @@ export default function ModalCreateUser({
                 });
             } else {
                 await api.post('/user', {
-                    user: {
-                        name: dataUser.name,
-                        document: dataUser.document,
-                        type: dataUser.type,
-                        email: dataUser.email,
-                        password: dataUser.password
-                    }
+                    name: dataUser.name,
+                    document: dataUser.document,
+                    type: dataUser.type,
+                    email: dataUser.email,
+                    password: dataUser.password
                 });
             }
 
