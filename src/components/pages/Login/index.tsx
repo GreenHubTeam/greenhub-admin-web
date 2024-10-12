@@ -1,4 +1,4 @@
-import Image from 'next/image'
+import Image from 'next/image';
 import { FormLoginComponent } from "./Form";
 import { ModalLoginComponent } from './Modal';
 import { Box, Typography } from "@mui/material";

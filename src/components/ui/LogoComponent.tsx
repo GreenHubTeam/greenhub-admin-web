@@ -1,6 +1,6 @@
-import { Box, Divider, Typography } from "@mui/material";
 import Image from "next/image";
 import Logo from '../../../public/logo.png'
+import { Box, Divider, Typography } from "@mui/material";
 
 export function LogoComponent() {
     return (

@@ -1,17 +1,16 @@
 'use client'
 
 import Link from "next/link";
-import Image from "next/image";
+import { env } from "@/env/env";
 import { useEffect } from "react";
-import { signOut } from "next-auth/react";
 import { deleteCookie } from 'cookies-next';
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import LogoutIcon from '@mui/icons-material/Logout';
 import { setupAxiosInterceptors } from "@/libs/axios";
-import profileImage from '../../../public/profile.jpeg';
+import { signOut, useSession } from "next-auth/react";
 import { LogoComponent } from "@/components/ui/LogoComponent";
 import { Dashboard, CorporateFare, AccountBox, Assessment } from "@mui/icons-material";
-import { Box, Grid2, IconButton, List, ListItemButton, ListItemIcon, ListItemText, Tooltip } from "@mui/material";
+import { Avatar, Box, Grid2, IconButton, List, ListItemButton, ListItemIcon, ListItemText, Tooltip } from "@mui/material";
 interface LayoutHubProps {
     children: React.ReactNode;
 }
@@ -40,6 +39,9 @@ const linksNavs = [
 ]
 
 export default function LayoutHub({ children }: LayoutHubProps) {
+    const { data } = useSession();
+    const router = useRouter();
+
     const pathName = usePathname();
 
     useEffect(() => {
@@ -123,16 +125,10 @@ export default function LayoutHub({ children }: LayoutHubProps) {
                             </Tooltip>
 
                             <Tooltip title="Ver perfil">
-                                <IconButton>
-                                    <Box
-                                        component={Image}
-                                        src={profileImage}
-                                        alt="FOTO DE PERFIL"
-                                        width={35}
-                                        height={35}
-                                        sx={{
-                                            borderRadius: '50%'
-                                        }}
+                                <IconButton onClick={() => router.push('/hub/profile')}>
+                                    <Avatar
+                                        src={data?.user?.image ? `${env.base_url_api}/${data.user.image}` : ""}
+                                        alt={data?.user?.name || ""}
                                     />
                                 </IconButton>
                             </Tooltip>

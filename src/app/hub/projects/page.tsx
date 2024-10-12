@@ -1,5 +1,7 @@
-import { Typography } from "@mui/material";
+import { lazy } from "react"
+
+const ProjectPage = lazy(() => import('@/components/pages/Project'))
 
 export default function ProjectsPage() {
-    return <Typography>PROJETOS</Typography>
+    return <ProjectPage />
 }

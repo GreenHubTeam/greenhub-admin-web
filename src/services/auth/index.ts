@@ -2,6 +2,8 @@ import NextAuth from "next-auth";
 import { api } from "@/libs/axios";
 import { cookies } from "next/headers";
 import Credentials from "next-auth/providers/credentials";
+import { jwtDecode, JwtPayload } from 'jwt-decode';
+import { IUser } from "@/types/userTypes";
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
     providers: [
@@ -19,20 +21,23 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
                     if (status === 400) {
                         return null
-                    }
+                    };
 
-                    if (data.user.type !== "ADMIN") {
+                    if (data.type !== "ADMIN") {
                         return null
-                    }
+                    };
+
+                    const user = jwtDecode(data.token) as JwtPayload & IUser
 
                     cookies().set('jwt', data.token)
 
                     return {
-                        id: data.user.id,
-                        image: data.user.imagePath,
-                        email: data.user.email,
-                        name: data.user.name,
-                    }
+                        id: user.id,
+                        image: user.imagePath,
+                        email: user.email,
+                        name: user.name,
+                        token: data.token
+                    };
                 } catch (error) {
                     return null
                 }
