@@ -1,13 +1,13 @@
 'use client'
 
 import Link from "next/link";
-import { env } from "@/env/env";
 import { useEffect } from "react";
+import { signOut } from "next-auth/react";
+import { useAuth } from "@/hooks/useAuth";
 import { deleteCookie } from 'cookies-next';
-import { usePathname, useRouter } from "next/navigation";
 import LogoutIcon from '@mui/icons-material/Logout';
 import { setupAxiosInterceptors } from "@/libs/axios";
-import { signOut, useSession } from "next-auth/react";
+import { usePathname, useRouter } from "next/navigation";
 import { LogoComponent } from "@/components/ui/LogoComponent";
 import { Dashboard, CorporateFare, AccountBox, Assessment } from "@mui/icons-material";
 import { Avatar, Box, Grid2, IconButton, List, ListItemButton, ListItemIcon, ListItemText, Tooltip } from "@mui/material";
@@ -39,7 +39,7 @@ const linksNavs = [
 ]
 
 export default function LayoutHub({ children }: LayoutHubProps) {
-    const { data } = useSession();
+    const { profileImage, setProfileImage } = useAuth();
     const router = useRouter();
 
     const pathName = usePathname();
@@ -127,8 +127,11 @@ export default function LayoutHub({ children }: LayoutHubProps) {
                             <Tooltip title="Ver perfil">
                                 <IconButton onClick={() => router.push('/hub/profile')}>
                                     <Avatar
-                                        src={data?.user?.image ? `${env.base_url_api}/${data.user.image}` : ""}
-                                        alt={data?.user?.name || ""}
+                                        src={profileImage}
+                                        alt="Foto de perfil do usuario"
+                                        onError={() => {
+                                            setProfileImage("/fotop1.webp")
+                                        }}
                                     />
                                 </IconButton>
                             </Tooltip>

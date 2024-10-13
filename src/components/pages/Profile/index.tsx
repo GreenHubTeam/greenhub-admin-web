@@ -1,15 +1,14 @@
 'use client'
 
 import Image from "next/image";
-import { env } from "@/env/env";
 import { useAuth } from "@/hooks/useAuth";
+import { formatCPF } from "@/utils/formatCPF";
+import { AssignmentInd, Email } from "@mui/icons-material";
 import bannerProfile from '../../../../public/bannerProfile.jpg';
 import { Avatar, Box, Card, CardContent, Chip, Grid2, Typography } from "@mui/material";
-import { AssignmentInd, Email } from "@mui/icons-material";
-import { formatCPF } from "@/utils/formatCPF";
 
 export default function ProfileComponent() {
-    const { userData: user } = useAuth();
+    const { userData: user, profileImage } = useAuth();
 
     return (
         <Box
@@ -46,8 +45,8 @@ export default function ProfileComponent() {
                 }}
             >
                 <Avatar
-                    src={user?.imagePath ? `${env.base_url_api}/${user?.imagePath}` : ""}
-                    alt={user?.name || ""}
+                    src={profileImage}
+                    alt="Foto de perfil"
                     sx={{ height: '100px', width: '100px' }}
                 />
 

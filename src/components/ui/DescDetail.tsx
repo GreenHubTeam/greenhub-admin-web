@@ -26,7 +26,7 @@ export function DescDetail({
                 {label}
             </Typography>
 
-            <Typography
+            <Box
                 sx={{
                     display: 'flex',
                     alignItems: 'center',
@@ -35,7 +35,7 @@ export function DescDetail({
             >
                 {icon && icon}
                 {data}
-            </Typography>
+            </Box>
         </Box>
     )
 }

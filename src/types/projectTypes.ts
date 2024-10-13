@@ -5,7 +5,7 @@ export interface IProject {
     description: string;
     imagePath: string | null;
     categoryProjectId: string | null;
-    status: "APPROVED" | "REPROVED" | "WAITING";
+    status: "APPROVED" | "REPROVED" | "WAITING" | "INACTIVE";
     createdAt: Date;
     updatedAt: Date;
     Ong: {

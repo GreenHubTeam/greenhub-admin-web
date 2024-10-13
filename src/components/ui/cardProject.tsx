@@ -1,6 +1,8 @@
 import { env } from '@/env/env';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Box, Typography, Chip, CardContent, Card, CardMedia, Paper, CardActionArea, Avatar, } from '@mui/material';
+import { getStatusChip } from '@/utils/getStatusChip';
+import { Box, Typography, CardContent, Card, CardMedia, Paper, CardActionArea, Avatar, } from '@mui/material';
 
 interface ICardProjectProps {
     id: string;
@@ -15,28 +17,21 @@ interface ICardProjectProps {
 
 export function CardProject(data: ICardProjectProps) {
     const navigate = useRouter();
-
-    const getStatusChip = (status: "APPROVED" | "REPROVED" | "WAITING") => {
-        switch (status) {
-            case 'APPROVED':
-                return <Chip label='Aprovado' variant='filled' color='success' />;
-            case 'REPROVED':
-                return <Chip label='Rejeitado' variant='filled' color='error' />;
-            case 'WAITING':
-                return <Chip label='Pendente' variant='filled' color='warning' />;
-            default:
-                return <Chip label='Status desconhecido' variant='filled' color='default' />;
-        }
-    };
+    const [srcImage, setSrcImage] = useState(`${env.base_url_api}/${data.imagePath}` || "banner.jpg");
 
     return (
         <Paper variant='outlined'>
             <Card elevation={0}>
                 <CardActionArea onClick={() => navigate.push(`/hub/projects/${data.id}`)}>
                     <CardMedia
+                        component='img'
+                        alt='Project Image'
                         sx={{ height: 200 }}
-                        image={data.imagePath ? `${env.base_url_api}/${data.imagePath}` : "/banner.jpg"}
+                        image={srcImage}
                         title='Project Image'
+                        onError={() => {
+                            setSrcImage('/banner.jpg')
+                        }}
                     />
 
                     <CardContent>
