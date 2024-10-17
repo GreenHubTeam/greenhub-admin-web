@@ -1,8 +1,7 @@
-import { LogoComponent } from "@/components/ui/LogoComponent";
-import { Box, Button, Typography } from "@mui/material";
-import Image from "next/image";
-import NotFoundLogo from '../../public/notfound.png'
 import Link from "next/link";
+import Image from "next/image";
+import { Box, Button, Typography } from "@mui/material";
+import { LogoComponent } from "@/components/ui/LogoComponent";
 
 export default function NotFoundPage() {
     return (
@@ -21,7 +20,7 @@ export default function NotFoundPage() {
                 gap: '1rem'
             }}>
                 <Image
-                    src={NotFoundLogo}
+                    src='/notfound.png'
                     alt="Logo da greenHub"
                     width={300}
                     height={300}
@@ -46,7 +45,6 @@ export default function NotFoundPage() {
             <Box>
                 <LogoComponent />
             </Box>
-
         </Box>
     )
 }

@@ -96,7 +96,7 @@ export default function UserComponent() {
             field: "name",
             headerName: "Nome",
             resizable: false,
-            flex: 1,
+            flex: 2,
             renderCell: (params: GridRenderCellParams) => {
                 return (
                     <Box
@@ -311,17 +311,19 @@ export default function UserComponent() {
                         <MenuItem value="DONOR">Doador</MenuItem>
                     </TextField>
 
-                    <Button
-                        variant="outlined"
-                        sx={{
-                            borderColor: '#E8E8E8'
-                        }}
-                        onClick={() => setIsRefetch(prev => !prev)}
-                    >
-                        <Replay
-                            color="action"
-                        />
-                    </Button>
+                    <Tooltip title="Recarregar">
+                        <Button
+                            variant="outlined"
+                            sx={{
+                                borderColor: '#E8E8E8'
+                            }}
+                            onClick={() => setIsRefetch(prev => !prev)}
+                        >
+                            <Replay
+                                color="action"
+                            />
+                        </Button>
+                    </Tooltip>
                 </Box>
 
                 <Box

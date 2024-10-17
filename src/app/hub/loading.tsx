@@ -1,5 +1,5 @@
-import { LogoComponent } from "@/components/ui/LogoComponent";
 import { Box, CircularProgress } from "@mui/material";
+import { LogoComponent } from "@/components/ui/LogoComponent";
 
 export default function Loagding() {
     return (
@@ -9,7 +9,6 @@ export default function Loagding() {
             alignItems: 'center',
             flexDirection: 'column',
             gap: '1rem',
-            height: '100vh'
         }}>
             <LogoComponent />
             <CircularProgress color="success" />

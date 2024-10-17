@@ -4,6 +4,7 @@ import Image from "next/image";
 import { api } from "@/libs/axios";
 import CountUp from 'react-countup';
 import { toast } from "react-toastify";
+import { PieChart } from "@mui/x-charts";
 import { useEffect, useState } from "react";
 import GroupIcon from '@mui/icons-material/Group';
 import bannerImage from '../../../../public/banner.jpg';
@@ -68,6 +69,7 @@ export default function DashboardComponent() {
                         component={Image}
                         src={bannerImage}
                         fill
+                        priority
                         alt="Banner"
                         sx={{
                             objectFit: 'cover',
@@ -211,6 +213,83 @@ export default function DashboardComponent() {
                                 />
                             </Box>
                         </Paper>
+                    </Grid2>
+                    <Grid2 size={6}>
+                        <Paper
+                            variant='outlined'
+                            sx={{
+                                minHeight: '150px',
+                                padding: '1rem',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                borderRadius: 2
+                            }}
+                        >
+                            <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                                Relação de Tipos de Usuarios
+                            </Typography>
+                            <PieChart
+                                series={[{
+                                    data: dashboardData?.dataChartUsers?.map((data, index) => {
+                                        const totalValue = dashboardData.dataChartUsers.reduce((acc, curr) => acc + curr.value, 0); // Soma dos valores
+                                        const percentage = (data.value / totalValue) * 100; // Calcula a porcentagem
+
+                                        return {
+                                            id: index,
+                                            value: data.value,
+                                            label: `${data.label} (${percentage.toFixed(1)}%)`,
+                                        };
+                                    }),
+                                    innerRadius: 30,
+                                    outerRadius: 100,
+                                    paddingAngle: 5,
+                                    cornerRadius: 5,
+                                    cx: 150,
+                                    cy: 150
+                                }]}
+                                height={300}
+                            />
+                        </Paper>
+
+                    </Grid2>
+                    <Grid2 size={6}>
+                        <Paper
+                            variant='outlined'
+                            sx={{
+                                minHeight: '150px',
+                                padding: '1rem 2rem',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                borderRadius: 2
+                            }}
+                        >
+                            <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                                Relação de Projetos
+                            </Typography>
+                            <PieChart
+                                series={[{
+                                    data: dashboardData?.dataChartProject?.map((data, index) => {
+                                        const totalValue = dashboardData.dataChartProject.reduce((acc, curr) => acc + curr.value, 0); // Soma dos valores
+                                        const percentage = (data.value / totalValue) * 100; // Calcula a porcentagem
+
+                                        return {
+                                            id: index,
+                                            value: data.value,
+                                            label: `${data.label} (${percentage.toFixed(1)}%)`,
+                                        };
+                                    }),
+                                    innerRadius: 30,
+                                    outerRadius: 100,
+                                    paddingAngle: 5,
+                                    cornerRadius: 5,
+                                    cx: 150,
+                                    cy: 150,
+                                }]}
+                                colors={['green', 'red', 'orange']}
+                                height={300}
+                            />
+                        </Paper>
+
                     </Grid2>
                     <Grid2 size={4}>
                         <Paper

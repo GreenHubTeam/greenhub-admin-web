@@ -1,10 +1,10 @@
 export interface IUser {
-    id: string; // ID no formato UUID
-    document: string; // CPF ou CNPJ
+    id: string;
+    document: string;
     email: string;
     name: string;
-    type: 'ADMIN' | 'DONOR' | 'ONG'; // Tipos de usuário, pode ajustar conforme o caso
-    createdAt: Date; // Data de criação
-    updatedAt: Date; // Data de atualização
-    imagePath: string; // Caminho para a imagem de perfil
+    type: 'ADMIN' | 'DONOR' | 'ONG';
+    createdAt: Date;
+    updatedAt: Date;
+    imagePath: string;
 }

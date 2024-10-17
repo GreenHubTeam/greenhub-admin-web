@@ -41,6 +41,8 @@ export default function ProjectDetailComponent({ id }: { id: string }) {
         };
 
         fetchProjectData();
+
+        return () => new AbortController().abort();
     }, [id, refetchData]);
 
     async function changeStatusProject(status: "APPROVED" | "REPROVED" | "WAITING" | "INACTIVE") {

@@ -4,7 +4,7 @@ interface User {
     document: string;
     email: string;
     imagePath: string | null;
-    type: 'ONG' | 'ADMIN' | 'DONOR'; // Ajuste conforme o tipo de usuário disponível
+    type: 'ONG' | 'ADMIN' | 'DONOR';
     createdAt: string;
 }
 
@@ -20,7 +20,7 @@ export interface IOngType {
     street: string;
     city: string;
     telephone: string;
-    complement?: string; // Campo opcional
+    complement?: string;
     createdAt: string;
     updatedAt: string;
     imagePath?: string | null;

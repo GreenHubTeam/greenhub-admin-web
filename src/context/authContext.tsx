@@ -1,11 +1,11 @@
 'use client'
 
+import { env } from "@/env/env";
 import { jwtDecode } from "jwt-decode";
 import { getCookie } from "cookies-next";
 import { IUser } from "@/types/userTypes";
 import { useSession } from "next-auth/react";
 import { createContext, Dispatch, ReactNode, SetStateAction, useEffect, useState } from "react";
-import { env } from "@/env/env";
 
 interface AuthContextProps {
     userData: IUser | null

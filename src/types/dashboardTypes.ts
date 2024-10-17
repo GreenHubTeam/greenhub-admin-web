@@ -5,4 +5,6 @@ export interface IDashboardType {
     totalProjects: number;
     totalProjectsApproved: number;
     totalProjectsReproved: number;
+    dataChartUsers: { label: string, value: number }[]
+    dataChartProject: { label: string, value: number }[]
 }

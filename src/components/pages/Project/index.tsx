@@ -2,46 +2,174 @@
 
 import { api } from "@/libs/axios";
 import { toast } from "react-toastify";
+import useSearch from "@/hooks/useSearch";
 import { useEffect, useState } from "react";
 import { IProject } from "@/types/projectTypes";
+import { Replay, Search } from "@mui/icons-material";
 import { CardProject } from "@/components/ui/cardProject";
-import { Box, Grid2, Skeleton, Typography } from "@mui/material";
+import { Box, Button, Grid2, InputAdornment, MenuItem, Pagination, Skeleton, TextField, Tooltip, Typography } from "@mui/material";
+
+const PAGE_SIZE = 6;
 
 export default function ProjectPage() {
-    const [projectsData, setProjectsData] = useState<IProject[] | null>(null);
-
-    const fetchProjects = async () => {
-        try {
-            const response = await api.get('/project/all');
-
-            setProjectsData(response.data.projects);
-        } catch (error) {
-            toast.error("Error ao buscar os projetos");
-        }
-    };
+    const [projectsData, setProjectsData] = useState<{
+        projects: IProject[],
+        count: number;
+        status: string;
+        page: number;
+    }>({
+        projects: [],
+        count: 1,
+        status: 'ALL',
+        page: 1
+    });
+    const [isRefetch, setIsRefetch] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const { searchFilter, setSearchFilter } = useSearch();
 
     useEffect(() => {
-        fetchProjects()
-    }, []);
+        const fetchProjects = async () => {
+            setIsLoading(true);
+            try {
+                const { data } = await api.get('/project/all', {
+                    params: {
+                        page: projectsData.page,
+                        status: projectsData.status,
+                        search: searchFilter,
+                        pageSize: PAGE_SIZE
+                    }
+                });
+
+                setProjectsData(prev => {
+                    return {
+                        ...prev,
+                        projects: data.projects,
+                        count: data.count
+                    }
+                });
+            } catch (error) {
+                toast.error("Error ao buscar os projetos");
+            } finally {
+                setIsLoading(false)
+            }
+        };
+
+        fetchProjects();
+
+        return () => new AbortController().abort();
+    }, [isRefetch, projectsData.page, projectsData.status, searchFilter]);
 
     return (
         <Box>
             <Typography
                 variant="h4"
                 fontWeight={700}
-                mb="2rem"
+                mb="1rem"
             >
                 Lista de Projetos
             </Typography>
 
+            <Box
+                sx={{
+                    marginTop: '2rem',
+                    display: 'flex',
+                    gap: '1rem',
+                    mb: '2rem'
+                }}
+            >
+                <TextField
+                    fullWidth
+                    label="Procure pelo Nome do projeto"
+                    sx={{
+                        flex: 1,
+                        backgroundColor: '#e7e7e7',
+                        borderRadius: '8px',
+                        '& .MuiOutlinedInput-root': {
+                            '& fieldset': {
+                                borderColor: 'transparent'
+                            },
+                            '&:hover fieldset': {
+                                borderColor: 'transparent',
+                            },
+                            '&.Mui-focused fieldset': {
+                                borderColor: 'transparent',
+                            },
+                        },
+                        '& .MuiInputLabel-root': {
+                            color: 'black',
+                        },
+                        '& .MuiInputLabel-root.Mui-focused': {
+                            color: 'green',
+                        },
+                    }}
+                    slotProps={{
+                        input: {
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <Search />
+                                </InputAdornment>
+                            ),
+                        },
+                    }}
+                    onChange={(e) => {
+                        setSearchFilter(e.target.value)
+                    }}
+                />
+
+                <TextField
+                    label="Status do projeto"
+                    select
+                    sx={{
+                        '& .MuiInputLabel-root': {
+                            color: 'gray',
+                        },
+                        '& .MuiInputLabel-root.Mui-focused': {
+                            color: 'green'
+                        },
+                        borderRadius: 2,
+                        width: '15rem',
+                        borderColor: '#E8E8E8'
+                    }}
+                    onChange={(e) => {
+                        setProjectsData(prev => {
+                            return {
+                                ...prev,
+                                status: e.target.value
+                            }
+                        })
+                    }}
+                >
+                    <MenuItem value="ALL">TODOS</MenuItem>
+                    <MenuItem value="WAITING">PENDENTES</MenuItem>
+                    <MenuItem value="APPROVED">APROVADOS</MenuItem>
+                    <MenuItem value="REPROVED">REPROVADOS</MenuItem>
+                    <MenuItem value="INACTIVE">INATIVOS</MenuItem>
+                </TextField>
+
+                <Tooltip title="Recarregar">
+                    <Button
+                        variant="outlined"
+                        sx={{
+                            borderColor: '#E8E8E8'
+                        }}
+                        onClick={() => setIsRefetch(prev => !prev)}
+                    >
+                        <Replay
+                            color="action"
+                        />
+                    </Button>
+                </Tooltip>
+
+            </Box>
+
             <Grid2 container spacing={2}>
-                {!projectsData ?
+                {!projectsData || isLoading ?
                     Array.from([1, 2, 3, 4].map((index) => (
                         <Grid2 key={index} size={6}>
                             <Skeleton height={350} variant="rounded" animation='wave' />
                         </Grid2>
                     )))
-                    : projectsData.map((project, index) => (
+                    : projectsData.projects.map((project, index) => (
                         <Grid2 key={index} size={6}>
                             <CardProject
                                 name={project.name}
@@ -54,7 +182,31 @@ export default function ProjectPage() {
                                 ongImagePath={project.Ong?.imagePath}
                             />
                         </Grid2>
-                    ))}
+                    ))
+                }
+
+                <Grid2 size={12}
+                    sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                    }}
+                >
+                    <Pagination
+                        count={Math.ceil(projectsData.count / PAGE_SIZE)} // Calcula o número de páginas
+                        page={projectsData.page}
+                        onChange={(e, value: number) => {
+                            setProjectsData(prev => {
+                                return {
+                                    ...prev,
+                                    page: value
+                                }
+                            })
+                        }}
+                        color="primary"
+                        sx={{ marginTop: '20px', mb: '2rem' }}
+                    />
+                </Grid2>
             </Grid2>
         </Box >
     )

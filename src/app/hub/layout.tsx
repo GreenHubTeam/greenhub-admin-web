@@ -5,44 +5,18 @@ import { useEffect } from "react";
 import { signOut } from "next-auth/react";
 import { useAuth } from "@/hooks/useAuth";
 import { deleteCookie } from 'cookies-next';
+import { linksNavs } from "@/config/navLinks";
 import LogoutIcon from '@mui/icons-material/Logout';
 import { setupAxiosInterceptors } from "@/libs/axios";
 import { usePathname, useRouter } from "next/navigation";
 import { LogoComponent } from "@/components/ui/LogoComponent";
-import { Dashboard, CorporateFare, AccountBox, Assessment } from "@mui/icons-material";
 import { Avatar, Box, Grid2, IconButton, List, ListItemButton, ListItemIcon, ListItemText, Tooltip } from "@mui/material";
-interface LayoutHubProps {
-    children: React.ReactNode;
-}
 
-const linksNavs = [
-    {
-        name: 'Dashboard',
-        path: '/hub/dashboard',
-        icon: <Dashboard />
-    },
-    {
-        name: 'ONGs',
-        path: '/hub/ongs',
-        icon: <CorporateFare />
-    },
-    {
-        name: 'Usuarios',
-        path: '/hub/users',
-        icon: <AccountBox />
-    },
-    {
-        name: 'Projetos',
-        path: '/hub/projects',
-        icon: <Assessment />
-    },
-]
-
-export default function LayoutHub({ children }: LayoutHubProps) {
-    const { profileImage, setProfileImage } = useAuth();
+export default function LayoutHub({ children }: { children: React.ReactNode; }) {
     const router = useRouter();
-
     const pathName = usePathname();
+
+    const { profileImage, setProfileImage } = useAuth();
 
     useEffect(() => {
         setupAxiosInterceptors(signOut)

@@ -9,10 +9,10 @@ import useSearch from "@/hooks/useSearch";
 import { useEffect, useState } from "react";
 import { formatCNPJ } from "@/utils/formatCNPJ";
 import { ModalCreateOng } from "@/components/ui/ong/ModalCreateOng";
+import { ModalDeleteOng } from "@/components/ui/ong/ModalDeleteOng";
 import { Add, Delete, Mode, Replay, Search } from "@mui/icons-material";
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import { Avatar, Box, Button, IconButton, InputAdornment, TextField, Tooltip, Typography } from "@mui/material";
-import { ModalDeleteOng } from "@/components/ui/ong/ModalDeleteOng";
 
 export default function OngComponent() {
     const [dataOng, setDataOng] = useState({
@@ -24,12 +24,12 @@ export default function OngComponent() {
         }
     });
 
-    const [user, setUser] = useState<{ userId: string, ongId: string } | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [isRefetch, setIsRefetch] = useState(false);
     const { searchFilter, setSearchFilter } = useSearch();
     const [isOpenModalCreateOng, setIsOpenModalCreateOng] = useState(false);
     const [isOpenModalDeleteOng, setIsOpenModalDeleteOng] = useState(false);
+    const [user, setUser] = useState<{ userId: string, ongId: string } | null>(null);
 
     const handleOpenDeleteModal = () => {
         setIsOpenModalDeleteOng(true);
@@ -93,7 +93,7 @@ export default function OngComponent() {
             field: "name",
             headerName: "Nome",
             resizable: false,
-            flex: 1,
+            flex: 2,
             renderCell: (params: GridRenderCellParams) => {
                 return (
                     <Box
@@ -251,10 +251,10 @@ export default function OngComponent() {
                                 },
                             },
                             '& .MuiInputLabel-root': {
-                                color: 'black',               // Define a cor do label
+                                color: 'black',
                             },
                             '& .MuiInputLabel-root.Mui-focused': {
-                                color: 'green',              // Cor do label quando focado
+                                color: 'green',
                             },
                         }}
                         slotProps={{
@@ -271,17 +271,19 @@ export default function OngComponent() {
                         }}
                     />
 
-                    <Button
-                        variant="outlined"
-                        sx={{
-                            borderColor: '#E8E8E8'
-                        }}
-                        onClick={() => setIsRefetch(prev => !prev)}
-                    >
-                        <Replay
-                            color="action"
-                        />
-                    </Button>
+                    <Tooltip title="Recarregar">
+                        <Button
+                            variant="outlined"
+                            sx={{
+                                borderColor: '#E8E8E8'
+                            }}
+                            onClick={() => setIsRefetch(prev => !prev)}
+                        >
+                            <Replay
+                                color="action"
+                            />
+                        </Button>
+                    </Tooltip>
                 </Box>
 
                 <Box

@@ -8,7 +8,7 @@ interface ICardProjectProps {
     id: string;
     name: string;
     description: string;
-    status: "APPROVED" | "REPROVED" | "WAITING";
+    status: "APPROVED" | "REPROVED" | "WAITING" | "INACTIVE";
     imagePath: string | null;
     ongId: string;
     ongName: string;

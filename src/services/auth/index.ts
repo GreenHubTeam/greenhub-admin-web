@@ -1,11 +1,11 @@
 import NextAuth from "next-auth";
 import { api } from "@/libs/axios";
 import { cookies } from "next/headers";
-import Credentials from "next-auth/providers/credentials";
-import { jwtDecode, JwtPayload } from 'jwt-decode';
 import { IUser } from "@/types/userTypes";
+import { jwtDecode, JwtPayload } from 'jwt-decode';
+import Credentials from "next-auth/providers/credentials";
 
-export const { auth, handlers, signIn, signOut } = NextAuth({
+export const { auth, handlers: { GET, POST }, signIn, signOut } = NextAuth({
     providers: [
         Credentials({
             credentials: {
