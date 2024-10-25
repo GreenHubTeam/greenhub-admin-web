@@ -91,6 +91,32 @@ export default function UserComponent() {
         return () => new AbortController().abort();
     }, [isRefetch, searchFilter, dataUser.userType, dataUser.pageModel]);
 
+    const getRandomProfileImage = () => {
+        const profileImages = [
+            "/profile1.png",
+            "/profile2.png",
+            "/profile3.png",
+            "/profile4.png",
+            "/profile5.png",
+            "/profile6.png"
+        ];
+        const randomIndex = Math.floor(Math.random() * profileImages.length);
+        return profileImages[randomIndex];
+    };
+
+    const CustomAvatar = ({ imagePath, name }: { imagePath: string, name: string }) => {
+        const [avatarSrc, setAvatarSrc] = useState(`${env.base_url_api}/${imagePath}`);
+
+        return (
+            <Avatar
+                src={avatarSrc}
+                alt={name}
+                onError={() => setAvatarSrc(getRandomProfileImage())}
+                sx={{ cursor: 'pointer' }}
+            />
+        );
+    };
+
     const columns: GridColDef[] = [
         {
             field: "name",
@@ -107,10 +133,7 @@ export default function UserComponent() {
                             gap: '1rem',
                         }}
                     >
-                        <Avatar
-                            src={`${env.base_url_api}/${params.row.imagePath}`}
-                            alt={params.row.name}
-                        />
+                        <CustomAvatar imagePath={params.row.imagePath} name={params.row.name} />
 
                         <Box
                             sx={{

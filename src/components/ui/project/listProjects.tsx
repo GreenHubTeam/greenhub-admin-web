@@ -7,11 +7,11 @@ import { useEffect, useState } from "react";
 import { IProject } from "@/types/projectTypes";
 import { Replay, Search } from "@mui/icons-material";
 import { CardProject } from "@/components/ui/cardProject";
-import { Box, Button, Grid2, InputAdornment, MenuItem, Pagination, Skeleton, TextField, Tooltip, Typography } from "@mui/material";
+import { Box, Button, Grid2, InputAdornment, MenuItem, Pagination, Skeleton, TextField, Tooltip } from "@mui/material";
 
 const PAGE_SIZE = 6;
 
-export default function ProjectPage() {
+export default function ListProject({ ongId }: { ongId: string }) {
     const [projectsData, setProjectsData] = useState<{
         projects: IProject[],
         count: number;
@@ -31,7 +31,7 @@ export default function ProjectPage() {
         const fetchProjects = async () => {
             setIsLoading(true);
             try {
-                const { data } = await api.get('/project/all', {
+                const { data } = await api.get(`/project/ong/${ongId}`, {
                     params: {
                         page: projectsData.page,
                         status: projectsData.status,
@@ -57,18 +57,10 @@ export default function ProjectPage() {
         fetchProjects();
 
         return () => new AbortController().abort();
-    }, [isRefetch, projectsData.page, projectsData.status, searchFilter]);
+    }, [isRefetch, projectsData.page, projectsData.status, searchFilter, ongId]);
 
     return (
         <Box>
-            <Typography
-                variant="h4"
-                fontWeight={700}
-                mb="1rem"
-            >
-                Lista de Projetos
-            </Typography>
-
             <Box
                 sx={{
                     marginTop: '2rem',
@@ -169,8 +161,11 @@ export default function ProjectPage() {
                             <Skeleton height={350} variant="rounded" animation='wave' />
                         </Grid2>
                     )))
-                    : projectsData.projects.map((project, index) => (
-                        <Grid2 key={index} size={6}>
+                    : projectsData.projects?.map((project, index) => (
+                        <Grid2 key={index} size={{
+                            xs: 12,
+                            sm: 6
+                        }}>
                             <CardProject
                                 name={project.name}
                                 description={project.description}
@@ -180,7 +175,6 @@ export default function ProjectPage() {
                                 ongName={project.Ong?.name}
                                 ongId={project.Ong?.id}
                                 ongImagePath={project.Ong?.imagePath}
-                                viewProfile
                             />
                         </Grid2>
                     ))

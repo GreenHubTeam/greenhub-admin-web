@@ -13,11 +13,38 @@ interface ICardProjectProps {
     ongId: string;
     ongName: string;
     ongImagePath: string | null;
+    viewProfile?: boolean;
 }
 
 export function CardProject(data: ICardProjectProps) {
     const navigate = useRouter();
     const [srcImage, setSrcImage] = useState(`${env.base_url_api}/${data.imagePath}` || "banner.jpg");
+
+    const getRandomProfileImage = () => {
+        const profileImages = [
+            "/profile1.png",
+            "/profile2.png",
+            "/profile3.png",
+            "/profile4.png",
+            "/profile5.png",
+            "/profile6.png"
+        ];
+        const randomIndex = Math.floor(Math.random() * profileImages.length);
+        return profileImages[randomIndex];
+    };
+
+    const CustomAvatar = ({ imagePath, name }: { imagePath: string, name: string }) => {
+        const [avatarSrc, setAvatarSrc] = useState(`${env.base_url_api}/${imagePath}`);
+
+        return (
+            <Avatar
+                src={avatarSrc}
+                alt={name}
+                onError={() => setAvatarSrc(getRandomProfileImage())}
+                sx={{ cursor: 'pointer' }}
+            />
+        );
+    };
 
     return (
         <Paper variant='outlined'>
@@ -66,31 +93,31 @@ export function CardProject(data: ICardProjectProps) {
                     </CardContent>
                 </CardActionArea>
 
-                <CardActionArea onClick={() => navigate.push(`/hub/ong/${data.id}`)}>
-                    <CardContent
-                        sx={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            height: '100%',
-                            gap: '1rem'
-                        }}
-                    >
-                        <Avatar
-                            src={`${env.base_url_api}/${data.ongImagePath}`}
-                            alt={data.ongName}
-                        />
-
-                        <Typography
+                {data.viewProfile && (
+                    <CardActionArea onClick={() => navigate.push(`/hub/ongs/${data.ongId}`)}>
+                        <CardContent
                             sx={{
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                                whiteSpace: 'nowrap'
+                                display: 'flex',
+                                alignItems: 'center',
+                                height: '100%',
+                                gap: '1rem'
                             }}
                         >
-                            {data.ongName}
-                        </Typography>
-                    </CardContent>
-                </CardActionArea>
+                            <CustomAvatar imagePath={data.ongImagePath || ""} name={data.ongName} />
+
+                            <Typography
+                                sx={{
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap'
+                                }}
+                            >
+                                {data.ongName}
+                            </Typography>
+                        </CardContent>
+                    </CardActionArea>
+                )
+                }
             </Card>
         </Paper >
     )

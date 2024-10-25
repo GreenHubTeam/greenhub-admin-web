@@ -2,18 +2,18 @@
 
 import { z } from "zod";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { env } from "@/env/env";
 import { api } from "@/libs/axios";
 import { toast } from "react-toastify";
 import { useAuth } from "@/hooks/useAuth";
 import { useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
 import { formatCPF } from "@/utils/formatCPF";
 import { isValdiCPF } from "@/utils/isValidCPF";
 import { zodResolver } from "@hookform/resolvers/zod";
 import bannerProfile from '../../../../public/bannerProfile.jpg';
 import { AssignmentInd, Email, Person, PhotoCamera } from "@mui/icons-material";
 import { Avatar, Badge, Box, Button, Card, CardContent, Chip, Grid2, IconButton, InputAdornment, TextField, Typography } from "@mui/material";
-import { env } from "@/env/env";
 
 const profileSchema = z.object({
     name: z.string().min(3, "Nome é obrigatório"),

@@ -1,3 +1,5 @@
+import { IOngType } from "./ongTypes";
+
 export interface IUser {
     id: string;
     document: string;
@@ -7,4 +9,5 @@ export interface IUser {
     createdAt: Date;
     updatedAt: Date;
     imagePath: string;
+    Ong?: IOngType
 }

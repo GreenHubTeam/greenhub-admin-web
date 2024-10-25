@@ -13,6 +13,7 @@ import { ModalDeleteOng } from "@/components/ui/ong/ModalDeleteOng";
 import { Add, Delete, Mode, Replay, Search } from "@mui/icons-material";
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import { Avatar, Box, Button, IconButton, InputAdornment, TextField, Tooltip, Typography } from "@mui/material";
+import { useRouter } from "next/navigation";
 
 export default function OngComponent() {
     const [dataOng, setDataOng] = useState({
@@ -88,6 +89,34 @@ export default function OngComponent() {
         return () => new AbortController().abort();
     }, [isRefetch, searchFilter, dataOng.pageModel]);
 
+    const getRandomProfileImage = () => {
+        const profileImages = [
+            "/profile1.png",
+            "/profile2.png",
+            "/profile3.png",
+            "/profile4.png",
+            "/profile5.png",
+            "/profile6.png"
+        ];
+        const randomIndex = Math.floor(Math.random() * profileImages.length);
+        return profileImages[randomIndex];
+    };
+
+    const CustomAvatar = ({ imagePath, name }: { imagePath: string, name: string }) => {
+        const [avatarSrc, setAvatarSrc] = useState(`${env.base_url_api}/${imagePath}`);
+
+        return (
+            <Avatar
+                src={avatarSrc}
+                alt={name}
+                onError={() => setAvatarSrc(getRandomProfileImage())}
+                sx={{ cursor: 'pointer' }}
+            />
+        );
+    };
+
+    const router = useRouter()
+
     const columns: GridColDef[] = [
         {
             field: "name",
@@ -97,18 +126,18 @@ export default function OngComponent() {
             renderCell: (params: GridRenderCellParams) => {
                 return (
                     <Box
+                        onClick={() => router.push(`/hub/ongs/${params.row.id}`)}
                         sx={{
                             display: 'flex',
                             alignItems: 'center',
                             height: '100%',
-                            gap: '1rem'
+                            gap: '1rem',
+                            ':hover': {
+                                cursor: 'pointer'
+                            }
                         }}
                     >
-                        <Avatar
-                            src={`${env.base_url_api}/${params.row.imagePath}`}
-                            alt={params.row.name}
-                        />
-
+                        <CustomAvatar imagePath={params.row.imagePath} name={params.row.name} />
                         <Box
                             sx={{
                                 display: 'flex',
@@ -292,6 +321,7 @@ export default function OngComponent() {
                     }}
                 >
                     <DataGrid
+                        disableRowSelectionOnClick
                         disableColumnSorting
                         disableColumnMenu
                         rowHeight={75}
