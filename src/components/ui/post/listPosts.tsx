@@ -6,14 +6,14 @@ import { IPostType } from "@/types/postTypes";
 import { Box, Grid2, Container, CircularProgress } from '@mui/material';
 
 export function ListPost({ ongId, profilePath }: { ongId: string, profilePath?: string }) {
-    const [postData, setPostData] = useState<IPostType[] | null>(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [postData, setPostData] = useState<IPostType[] | null>(null);
 
     async function fetchPost() {
         setIsLoading(true);
         try {
             const response = await api.get(`/post/ong/${ongId}`);
-            setPostData(response.data);
+            setPostData(response.data.posts);
         } catch (error) {
             console.log(error)
             toast.error("Error ao buscar os post")
