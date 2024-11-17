@@ -2,7 +2,7 @@ import { getUrl } from "./utils/getUrl";
 import { NextRequest, NextResponse } from "next/server";
 
 export function middleware(request: NextRequest) {
-    const token = request.cookies.get('authjs.session-token');
+    const token = request.cookies.get('jwt');
     const pathname = request.nextUrl.pathname;
 
     if (pathname.startsWith('/_next/') || pathname.startsWith('/static/') || pathname.endsWith('.jpg') || pathname.endsWith('.png') || pathname.endsWith('.svg') || pathname.endsWith('.ico') || pathname.endsWith('.webp')) {
@@ -14,6 +14,10 @@ export function middleware(request: NextRequest) {
     }
 
     if (pathname.includes('/hub') && !token) {
+        return NextResponse.redirect(new URL(getUrl('/login')))
+    }
+
+    if(!token) {
         return NextResponse.redirect(new URL(getUrl('/login')))
     }
 }
