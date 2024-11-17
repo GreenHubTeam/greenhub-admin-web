@@ -136,13 +136,13 @@ export default function ProjectDetailComponent({ id }: { id: string }) {
 
                                     <Divider />
 
-                                    <Typography
+                                    <Box
+                                        component='div'
+                                        dangerouslySetInnerHTML={{ __html: projectData.description }}
                                         sx={{
                                             my: '1rem'
                                         }}
-                                    >
-                                        {projectData.description}
-                                    </Typography>
+                                    />
                                 </CardContent>
                             </Card>
                         </Grid2>

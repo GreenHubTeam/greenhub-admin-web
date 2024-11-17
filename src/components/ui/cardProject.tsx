@@ -4,6 +4,11 @@ import { useRouter } from 'next/navigation';
 import { getStatusChip } from '@/utils/getStatusChip';
 import { Box, Typography, CardContent, Card, CardMedia, Paper, CardActionArea, Avatar, } from '@mui/material';
 
+const stripHtmlTags = (html: string) => {
+    const div = document.createElement("div");
+    div.innerHTML = html;
+    return div.textContent || div.innerText || "";
+};
 interface ICardProjectProps {
     id: string;
     name: string;
@@ -82,13 +87,9 @@ export function CardProject(data: ICardProjectProps) {
                         </Box>
 
                         <Typography
-                            sx={{
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                                whiteSpace: 'nowrap'
-                            }}
+                            noWrap
                         >
-                            {data.description}
+                            {stripHtmlTags(data.description)}
                         </Typography>
                     </CardContent>
                 </CardActionArea>

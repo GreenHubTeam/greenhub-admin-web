@@ -1,4 +1,4 @@
-import { AccountBox, Assessment, Category, CorporateFare, Dashboard, LocalPolice } from "@mui/icons-material";
+import { AccountBox, Assessment, Category, CorporateFare, Dashboard, LocalPolice, VolunteerActivism } from "@mui/icons-material";
 
 export const linksNavs = [
     {
@@ -31,4 +31,9 @@ export const linksNavs = [
         path: "/hub/categories",
         icon: <Category />
     },
+    {
+        name: "Doações",
+        path: '/hub/donations',
+        icon: <VolunteerActivism />
+    }
 ]
