@@ -16,10 +16,6 @@ export function middleware(request: NextRequest) {
     if (pathname.includes('/hub') && !token) {
         return NextResponse.redirect(new URL(getUrl('/login')))
     }
-
-    if(!token) {
-        return NextResponse.redirect(new URL(getUrl('/login')))
-    }
 }
 
 export const config = {
